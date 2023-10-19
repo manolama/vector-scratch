@@ -38,7 +38,7 @@ jmhRunBytecodeGenerator {
 
 jmh {
     zip64 = true
-    includes = ["VectorJMH"]
+    includes = ["VectorIntCrossLaneAggregations"]
     //profilers = ['gc']
     benchmarkMode = ['avgt']
     timeUnit = 'us'

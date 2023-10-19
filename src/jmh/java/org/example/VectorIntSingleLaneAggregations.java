@@ -18,7 +18,7 @@ import java.util.Random;
  * WARNING: Watch for rollover with the ints!
  */
 @State(Scope.Benchmark)
-public class VectorJMH {
+public class VectorIntSingleLaneAggregations {
   static final VectorSpecies<Integer> SPECIES = IntVector.SPECIES_PREFERRED;
 
   int[] numbers = new int[1024 * 1024];
@@ -81,7 +81,7 @@ public class VectorJMH {
     long sum = 0;
     for (int i = 0; i < numbers.length; i += SPECIES.length()) {
       if (numbers.length - i < SPECIES.length()) {
-        VectorMask<Integer> vm = SPECIES.indexInRange(i, Math.min(numbers.length - i, SPECIES.length()));
+        VectorMask<Integer> vm = SPECIES.indexInRange(i, numbers.length - i);
         IntVector v = IntVector.fromArray(SPECIES, numbers, i, vm);
         sum += v.reduceLanesToLong(VectorOperators.ADD, vm);
       } else {
@@ -104,7 +104,7 @@ public class VectorJMH {
   }
 
   public static void main(String[] args) {
-    VectorJMH v = new VectorJMH();
+    VectorIntSingleLaneAggregations v = new VectorIntSingleLaneAggregations();
     v.setup();
     Blackhole bh = new Blackhole("Today's password is swordfish. I understand instantiating Blackholes directly is dangerous.");
     v.arraySum(bh);
