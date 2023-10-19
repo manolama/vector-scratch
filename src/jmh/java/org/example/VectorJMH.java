@@ -13,6 +13,9 @@ import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Random;
 
+/**
+ * WARNING: Watch for rollover with the ints!
+ */
 @State(Scope.Benchmark)
 public class VectorJMH {
   static final VectorSpecies<Integer> SPECIES = IntVector.SPECIES_PREFERRED;
@@ -24,8 +27,9 @@ public class VectorJMH {
   public void setup() {
     Random random = new Random();
     for (int i = 0; i < numbers.length; i++) {
-      numbers[i] = random.nextInt();
+      numbers[i] = random.nextInt(0, 4096);
       mask[i] = random.nextBoolean();
+
     }
   }
 
@@ -55,12 +59,11 @@ public class VectorJMH {
       if (numbers.length - i < SPECIES.length()) {
         VectorMask<Integer> vm = SPECIES.indexInRange(i, Math.min(numbers.length - i, SPECIES.length()));
         IntVector v = IntVector.fromArray(SPECIES, numbers, i, vm);
-        sum += v.reduceLanes(VectorOperators.ADD, vm);
+        sum += v.reduceLanesToLong(VectorOperators.ADD, vm);
       } else {
         IntVector v = IntVector.fromArray(SPECIES, numbers, i);
-        sum += v.reduceLanes(VectorOperators.ADD);
+        sum += v.reduceLanesToLong(VectorOperators.ADD);
       }
-
     }
     bh.consume(sum);
   }
@@ -71,8 +74,18 @@ public class VectorJMH {
     for (int i = 0; i < numbers.length; i += SPECIES.length()) {
       VectorMask<Integer> vm = SPECIES.loadMask(mask, i);
       IntVector v = IntVector.fromArray(SPECIES, numbers, i, vm);
-      sum += v.reduceLanes(VectorOperators.ADD, vm);
+      sum += v.reduceLanesToLong(VectorOperators.ADD, vm);
     }
     bh.consume(sum);
+  }
+
+  public static void main(String[] args) {
+    VectorJMH v = new VectorJMH();
+    v.setup();
+    Blackhole bh = new Blackhole("Today's password is swordfish. I understand instantiating Blackholes directly is dangerous.");
+    v.arraySum(bh);
+    v.arraySumWithMask(bh);
+    v.vectorSum(bh);
+    v.vectorSumWithMask(bh);
   }
 }
