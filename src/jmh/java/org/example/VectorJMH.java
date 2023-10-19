@@ -1,7 +1,6 @@
 package org.example;
 
 import jdk.incubator.vector.IntVector;
-import jdk.incubator.vector.Vector;
 import jdk.incubator.vector.VectorMask;
 import jdk.incubator.vector.VectorOperators;
 import jdk.incubator.vector.VectorSpecies;
@@ -10,7 +9,9 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.infra.Blackhole;
+import org.roaringbitmap.RoaringBitmap;
 
+import java.util.BitSet;
 import java.util.Random;
 
 /**
@@ -22,6 +23,8 @@ public class VectorJMH {
 
   int[] numbers = new int[1024 * 1024];
   boolean[] mask = new boolean[1024 * 1024];
+  BitSet bitSet = new BitSet();
+  RoaringBitmap rb = new RoaringBitmap();
 
   @Setup
   public void setup() {
@@ -29,7 +32,8 @@ public class VectorJMH {
     for (int i = 0; i < numbers.length; i++) {
       numbers[i] = random.nextInt(0, 4096);
       mask[i] = random.nextBoolean();
-
+      bitSet.set(i, mask[i]);
+      if (mask[i]) rb.add(i);
     }
   }
 
@@ -47,6 +51,26 @@ public class VectorJMH {
     long sum = 0;
     for (int i = 0; i < numbers.length; i++) {
       if (mask[i])
+        sum += numbers[i];
+    }
+    bh.consume(sum);
+  }
+
+  @Benchmark
+  public void arraySumWithMaskBitmap(Blackhole bh) {
+    long sum = 0;
+    for (int i = 0; i < numbers.length; i++) {
+      if (bitSet.get(i))
+        sum += numbers[i];
+    }
+    bh.consume(sum);
+  }
+
+  @Benchmark
+  public void arraySumWithMaskRoaringBitmap(Blackhole bh) {
+    long sum = 0;
+    for (int i = 0; i < numbers.length; i++) {
+      if (rb.contains(i))
         sum += numbers[i];
     }
     bh.consume(sum);
