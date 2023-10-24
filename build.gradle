@@ -39,9 +39,10 @@ jmhRunBytecodeGenerator {
 jmh {
     zip64 = true
     includes = ["VectorIntCrossLaneAggregations"]
-    //profilers = ['gc']
+    //profilers = ['xperfasm']
     benchmarkMode = ['avgt']
     timeUnit = 'us'
+    //jvmArgs = ['--add-modules jdk.incubator.vector -XX:+UnlockDiagnosticVMOptions -XX:+PrintAssembly']
     jvmArgs = ['--add-modules jdk.incubator.vector']
     timeOnIteration = '1s'
     warmup = '1s'
