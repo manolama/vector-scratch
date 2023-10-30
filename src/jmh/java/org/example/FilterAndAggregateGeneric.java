@@ -36,6 +36,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Generic trace without calling out specific tag columns.
+ *
+ * Benchmark                                              Mode  Cnt       Score      Error  Units
+ * FilterAndAggregateGeneric.appMasksSerial               avgt    5  143177.058 ± 7656.048  us/op
+ * FilterAndAggregateGeneric.appMasksSerialParallel       avgt    5  141720.779 ± 5160.710  us/op
+ * FilterAndAggregateGeneric.appMasksSerialParallelLight  avgt    5  139719.397 ± 8587.887  us/op
+ * FilterAndAggregateGeneric.appNaive                     avgt    5    3460.346 ±  235.757  us/op
+ */
 @State(Scope.Benchmark)
 public class FilterAndAggregateGeneric {
   static final VectorSpecies<Long> SPECIES = LongVector.SPECIES_PREFERRED;

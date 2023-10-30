@@ -37,6 +37,12 @@ import java.util.concurrent.Executors;
 
 /**
  * Calls out specific tags into dedicated span level columns.
+ *
+ * Benchmark                                              Mode  Cnt       Score      Error  Units
+ * FilterAndAggregateCallout.appMasksSerial               avgt    5    6572.202 ±  870.303  us/op
+ * FilterAndAggregateCallout.appMasksSerialParallel       avgt    5    7350.753 ± 2185.300  us/op
+ * FilterAndAggregateCallout.appMasksSerialParallelLight  avgt    5    5430.311 ±  797.441  us/op
+ * FilterAndAggregateCallout.appNaive                     avgt    5     396.599 ±   11.061  us/op
  */
 @State(Scope.Benchmark)
 public class FilterAndAggregateCallout {
