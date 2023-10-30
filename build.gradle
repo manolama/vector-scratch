@@ -41,7 +41,8 @@ jmhRunBytecodeGenerator {
 
 jmh {
     zip64 = true
-    includes = ["FilterAndAggregate.*"]
+    //includes = ["FilterAndAggregate.*"]
+    includes = ["VectorInt.*"]
     //profilers = ['xperfasm']
     benchmarkMode = ['avgt']
     timeUnit = 'us'

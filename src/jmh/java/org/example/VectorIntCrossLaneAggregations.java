@@ -11,6 +11,15 @@ import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Random;
 
+/**
+ * Testing group by aggregations.
+ *
+ * Benchmark                                                      Mode  Cnt      Score     Error  Units
+ * VectorIntCrossLaneAggregations.arraySum                        avgt    5    648.684 ± 143.865  us/op
+ * VectorIntCrossLaneAggregations.arraySumWithMask                avgt    5   3754.980 ± 352.458  us/op
+ * VectorIntCrossLaneAggregations.vectorSum                       avgt    5    722.167 ± 223.190  us/op
+ * VectorIntCrossLaneAggregations.vectorSumWithMask               avgt    5    878.222 ± 242.668  us/op
+ */
 @State(Scope.Benchmark)
 public class VectorIntCrossLaneAggregations {
   static final VectorSpecies<Integer> SPECIES = IntVector.SPECIES_PREFERRED;

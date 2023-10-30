@@ -15,7 +15,16 @@ import java.util.BitSet;
 import java.util.Random;
 
 /**
+ * Testing time aggregations.
+ * 
  * WARNING: Watch for rollover with the ints!
+ *
+ * VectorIntSingleLaneAggregations.arraySum                       avgt    5    101.113 ±   4.457  us/op
+ * VectorIntSingleLaneAggregations.arraySumWithMask               avgt    5   3295.850 ± 153.746  us/op
+ * VectorIntSingleLaneAggregations.arraySumWithMaskBitmap         avgt    5   3946.306 ± 662.679  us/op
+ * VectorIntSingleLaneAggregations.arraySumWithMaskRoaringBitmap  avgt    5  15508.068 ± 878.481  us/op
+ * VectorIntSingleLaneAggregations.vectorSum                      avgt    5    208.797 ±  17.983  us/op
+ * VectorIntSingleLaneAggregations.vectorSumWithMask              avgt    5    293.366 ±  80.278  us/op
  */
 @State(Scope.Benchmark)
 public class VectorIntSingleLaneAggregations {
